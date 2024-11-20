@@ -1,10 +1,13 @@
 <?php
+
 class formdetails
 {
   public $fnameErr, $lnameErr = "";
   public $fname, $lname, $name = "";
+  public $marksInput = "";
+  public $marksArray = [];
 
-  function validation()
+  public function nameValidation()
   {
     if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
@@ -30,7 +33,7 @@ class formdetails
     }
   }
 
-  function test_input($data)
+  public function test_input($data)
   {
     $data = trim($data);
     $data = stripslashes($data);
@@ -44,9 +47,63 @@ class formdetails
       echo "<h2>Hello $this->name</h2>";
     }
   }
+
+  public function marksValidate()
+  {
+    if (!empty($_POST['marks'])) {
+
+      $this->marksInput = $_POST['marks'];
+      $lines = explode("\n", trim($this->marksInput));
+
+      foreach ($lines as $line) {
+        $line = trim($line);
+        if (preg_match("/^[a-zA-Z\s]+\|[0-9]+$/", $line)) {
+          list($subject, $mark) = explode('|', $line);
+          $mark = (int)$mark;
+
+          // Check if the subject is already in the array
+          $subjectExists = false;
+          foreach ($this->marksArray as $entry) {
+            if (strtolower($entry['subject']) === strtolower($subject)) {
+              $subjectExists = true;
+              break;
+            }
+          }
+
+          if ($subjectExists) {
+            echo "<p style='color: red;'>Duplicate entry for subject: $subject</p>";
+          } elseif ($mark >= 0 && $mark <= 100) {
+            $this->marksArray[] = ["subject" => $subject, "mark" => $mark];
+          } else {
+            echo "<p style='color: red;'>Marks for $subject must be between 0 and 100. You entered: $mark</p>";
+          }
+        } else {
+          echo "<p style='color: red;'>Invalid format: $line (Correct format: Subject|Marks)</p>";
+        }
+      }
+    }
+  }
+
+  public function displayMarksTable()
+  {
+    if (!empty($this->marksArray)) {
+      echo "<h2>Your Marks:</h2>";
+      echo "<table border='1' style='border-collapse: collapse; width: 50%; text-align: left;'>";
+      echo "<tr><th>Subject</th><th>Marks</th></tr>";
+
+      foreach ($this->marksArray as $entry) {
+        echo "<tr>";
+        echo "<td>" . htmlspecialchars($entry['subject']) . "</td>";
+        echo "<td>" . htmlspecialchars($entry['mark']) . "</td>";
+        echo "</tr>";
+      }
+
+      echo "</table>";
+    } else {
+      echo "<p style='color: red;'>No valid marks provided.</p>";
+    }
+  }
 }
 
 $formdata = new formdetails();
-$formdata->validation();
-?>
-
+$formdata->nameValidation(); ?>
