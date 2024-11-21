@@ -30,6 +30,10 @@
     <label for="marks">Subject Marks (Subject|marks) :</label>
     <textarea name="marks" id="marks" rows="5" cols="25"></textarea>
     <br><br>
+    <label for="phone">Phone (+91 xxxxxxxxxx): </label>
+    <input type="text" id="phone" name="phone">
+    <span class="error" style="color: red;">* <?php echo $formdata->phoneErr; ?></span>
+    <br><br>
     <input type="submit" name="submit" id="submit">
   </form>
   <br>
@@ -42,6 +46,7 @@
     $fileobject->validate();
     echo '<img src="/uploads/' . $_FILES["fileToUpload"]["name"] . '" alt="image" height = "300" width = "300">';
     echo $formdata->greetings();
+    $formdata->phoneOutput();
     $formdata->displayMarksTable();
   }
   ?>

@@ -2,8 +2,8 @@
 
 class formdetails
 {
-  public $fnameErr, $lnameErr = "";
-  public $fname, $lname, $name = "";
+  public $fnameErr, $lnameErr, $phoneErr = "";
+  public $fname, $lname, $name, $phone = "";
   public $marksInput = "";
   public $marksArray = [];
 
@@ -103,7 +103,28 @@ class formdetails
       echo "<p style='color: red;'>No valid marks provided.</p>";
     }
   }
+
+  public function phoneValidation()
+  {
+
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+      if (empty($_POST['phone'])) {
+        $this->phoneErr = "Phone number can't be empty";
+      } else if (!preg_match('/^\+91\s?\d{10}$/', $_POST['phone'])) {
+        $this->phoneErr = "Invalid Format";
+      } else {
+        $this->phone = $this->test_input($_POST["phone"]);
+      }
+    }
+  }
+
+  public function phoneOutput() {
+    if(!empty($this->phone)) {
+      echo 'Your phone number is '. $this->phone . '<br><br>';
+    }
+  }
 }
 
 $formdata = new formdetails();
-$formdata->nameValidation(); ?>
+$formdata->nameValidation();
+$formdata->phoneValidation();
