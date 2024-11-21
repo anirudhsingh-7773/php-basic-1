@@ -2,8 +2,8 @@
 
 class formdetails
 {
-  public $fnameErr, $lnameErr, $phoneErr = "";
-  public $fname, $lname, $name, $phone = "";
+  public $fnameErr, $lnameErr, $phoneErr, $emailErr = "";
+  public $fname, $lname, $name, $phone, $email = "";
   public $marksInput = "";
   public $marksArray = [];
 
@@ -118,9 +118,50 @@ class formdetails
     }
   }
 
-  public function phoneOutput() {
-    if(!empty($this->phone)) {
-      echo 'Your phone number is '. $this->phone . '<br><br>';
+  public function phoneOutput()
+  {
+    if (!empty($this->phone)) {
+      echo 'Your phone number is ' . $this->phone . '<br><br>';
+    }
+  }
+
+  public function emailValidation()
+  {
+    if ($_SERVER['REQUEST_METHOD'] == "POST") {
+      if (empty($_POST['email'])) {
+        $this->emailErr = "Email can't be empty";
+      } else if (!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/', $_POST['email'])) {
+        $this->emailErr = "Invalid Format";
+      } else {
+        // set API Access Key
+        $access_key = '46ff2d5dd622a481bd7721e49f8e8660';
+
+        // set email address
+        $email_address = $this->test_input($_POST['email']);
+
+        $ch = curl_init('https://apilayer.net/api/check?access_key=' . $access_key . '&email=' . $email_address . '');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // Receive the data:
+        $json = curl_exec($ch);
+        curl_close($ch);
+
+        // Decode JSON response:
+        $validationResult = json_decode($json, true);
+        
+        if (!$validationResult['mx_found']) {
+          $this->emailErr = "Correct syntax but email is invalid.";
+        } else {
+          $this->email = $email_address;
+        }
+      }
+    }
+  }
+
+  public function emailOutput()
+  {
+    if (!empty($this->email)) {
+      echo 'Your Email is ' . $this->email . '<br><br>';
     }
   }
 }
@@ -128,3 +169,4 @@ class formdetails
 $formdata = new formdetails();
 $formdata->nameValidation();
 $formdata->phoneValidation();
+$formdata->emailValidation();
