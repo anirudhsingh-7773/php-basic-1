@@ -2,12 +2,13 @@
 
 class fileUploads
 {
+  public $imageErr = "";
   public function validate()
   {
     $target_dir = "uploads/";
     $target_file = "";
-    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $uploadOk = 1;
+    $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
     // Check if image file is a actual image or fake image
@@ -47,6 +48,15 @@ class fileUploads
       }
     }
   }
+
+  
+  public function noImageErr() {
+    $this->imageErr = "Choose a File";
+  }
 }
 
+
 $fileobject = new fileUploads();
+if ($_FILES['fileToUpload']['error'] === UPLOAD_ERR_NO_FILE) {
+  $fileobject->noImageErr();
+}
