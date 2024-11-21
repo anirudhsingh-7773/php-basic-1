@@ -42,7 +42,6 @@ class fileUploads
       // if everything is ok, try to upload file
     } else {
       if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-        
       } else {
         echo "Sorry, there was an error uploading your file.<br>";
       }
@@ -51,6 +50,3 @@ class fileUploads
 }
 
 $fileobject = new fileUploads();
-
-
-?>
