@@ -10,6 +10,7 @@ class fileUploads
     $uploadOk = 1;
     $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+    umask(000);
 
     // Check if image file is a actual image or fake image
     if (isset($_POST["submit"])) {
@@ -43,6 +44,7 @@ class fileUploads
       // if everything is ok, try to upload file
     } else {
       if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
+        
       } else {
         echo "Sorry, there was an error uploading your file.<br>";
       }

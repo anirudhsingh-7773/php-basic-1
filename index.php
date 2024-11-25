@@ -10,17 +10,19 @@
 <body>
 
   <?php require 'task1.php';
-  require 'upload.php'; ?>
+  require 'upload.php'; 
+  echo $PATH;
+  ?>
 
   <h1>PHP Form</h1>
-  <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data">
+  <form method="post" action="submission.php" enctype="multipart/form-data">
     <label for="fname">First Name: </label>
     <input type="text" name="fname">
     <span class="error" style="color: red;">* <?php echo $formdata->fnameErr; ?></span>
     <br><br>
     <label for="lname">Last Name: </label>
     <input type="text" name="lname">
-    <span class="error" style="color: red;">* <?php echo $formdata->lnameErr; ?></span>
+    <span class="error" style="color: red;">* <?php echo $formdata->lnameErr; echo __DIR__; ?></span>
     <br><br>
     <label for="name">Full Name: </label>
     <input type="text" name="name" value="<?php echo $formdata->name; ?>" disabled>
@@ -45,20 +47,6 @@
   <br>
 
 
-  <?php
-  if (isset($_POST['submit'])) {
-
-    $formdata->marksValidate();
-    if (!($_FILES['fileToUpload']['error'] === UPLOAD_ERR_NO_FILE)) {
-      $fileobject->validate();
-      echo '<img src="/uploads/' . htmlspecialchars($_FILES["fileToUpload"]["name"]) . '" alt="image" height = "300" width = "300">';
-    }
-    $formdata->greetings();
-    $formdata->phoneOutput();
-    $formdata->emailOutput();
-    $formdata->displayMarksTable();
-  }
-  ?>
 </body>
 
 </html>
