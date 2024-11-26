@@ -1,4 +1,6 @@
 <?php
+// form.php
+include 'checkSession.php';
 class form
 {
 
@@ -69,7 +71,11 @@ class form
     } else {
       // Attempt to upload the file
       if (move_uploaded_file($_FILES["uploadImage"]["tmp_name"], $target_file)) {
-        $this->content .= '<img width="300" height="300" src="'.__dir__.'/uploads/' . htmlspecialchars($_FILES["uploadImage"]["name"]) . '"/>';
+        if($_GET['q']==6){
+          $this->content .= '<img width="300" height="300" src="' . __dir__ . '/uploads/' . htmlspecialchars($_FILES["uploadImage"]["name"]) . '"/>';
+        } else {
+          $this->content .= '<img width="300" height="300" src="uploads/' . htmlspecialchars($_FILES["uploadImage"]["name"]) . '"/>';
+        }
       } else {
         $this->content .= "<p style='color: red;'>Sorry, there was an error uploading your file.</p><";
       }
@@ -185,18 +191,47 @@ class form
   }
 }
 
-if (isset($_POST["fname"]) && isset($_POST["lname"]) && isset($_POST['submit'])) {
-
-  // Set headers for Word document download
-  header("Content-type: application/vnd.ms-word");
-  header("Content-Disposition: attachment;Filename=form-data.doc");
-  header("Pragma: no-cache");
-  header("Expires: 0");
-}
 
 $formdata = new form();
-$formdata->imageValidation();
-$formdata->marksValidation();
-$formdata->phoneValidation();
-$formdata->emailValidation();
-$formdata->printContent();
+
+switch ($_GET['q']) {
+  case 1:
+    echo $formdata->content;
+    break;
+  case 2:
+    $formdata->imageValidation();
+    echo $formdata->content;
+    break;
+  case 3:
+    $formdata->imageValidation();
+    $formdata->marksValidation();
+    echo $formdata->content;
+    break;
+  case 4:
+    $formdata->imageValidation();
+    $formdata->marksValidation();
+    $formdata->phoneValidation();
+    echo $formdata->content;
+    break;
+  case 5:
+    $formdata->imageValidation();
+    $formdata->marksValidation();
+    $formdata->phoneValidation();
+    $formdata->emailValidation();
+    echo $formdata->content;
+    break;
+  case 6:
+    $formdata->imageValidation();
+    $formdata->marksValidation();
+    $formdata->phoneValidation();
+    $formdata->emailValidation();
+    $formdata->printContent();
+    // Set headers for Word document download
+    header("Content-type: application/vnd.ms-word");
+    header("Content-Disposition: attachment;Filename=form-data.doc");
+    header("Pragma: no-cache");
+    header("Expires: 0");
+    break;
+  default:
+    echo "<h1>Error</h1>";
+}
