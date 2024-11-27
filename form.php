@@ -54,6 +54,7 @@ class form
     // Allow certain file formats
     if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
       echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+      return;
       $uploadOk = 0;
     }
 
