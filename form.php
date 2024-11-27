@@ -120,11 +120,6 @@ class form
   }
 }
 
-
-
-
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $formdata = new form();
