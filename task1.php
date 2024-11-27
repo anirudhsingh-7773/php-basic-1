@@ -13,7 +13,7 @@
 <body>
   <section>
     <h1>Fill the Form</h1>
-    <form method="post" action="form.php?q=1">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . '?q=1'); ?>">
       <label for="fname">First Name: </label>
       <input type="text" name="fname" id="fname" oninput="autofill('fname','lname','fullname')" required placeholder="John">
       <span class="error" style="color: red;">* </span>
@@ -39,6 +39,7 @@
       <a href="logout.php">Logout</a>
 
     </div>
+    <?php require 'form.php' ?>
   </section>
   <script src="/js/script.js"></script>
 </body>

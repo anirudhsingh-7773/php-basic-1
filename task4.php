@@ -13,7 +13,7 @@
 <body>
   <section>
     <h1>Fill the Form</h1>
-    <form method="post" action="form.php?q=4" enctype="multipart/form-data">
+    <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'].'?q=4'); ?>" enctype="multipart/form-data">
       <label for="fname">First Name: </label>
       <input type="text" name="fname" id="fname" oninput="autofill('fname','lname','fullname')" required placeholder="John">
       <span class="error" style="color: red;">* </span>
@@ -32,7 +32,7 @@
       <textarea name="marks" id="marks" rows="5" cols="25" placeholder="English|80"></textarea>
       <br><br>
       <label for="phone">Phone (+91 xxxxxxxxxx): </label>
-      <input type="text" id="phone" name="phone" placeholder="+91 1231231231">
+      <input type="text" id="phone" name="phone" placeholder="+91 1231231234" value="+91 ">
       <br><br>
       <input type="submit" name="submit" id="submit">
     </form>
@@ -48,6 +48,7 @@
       <a href="logout.php">Logout</a>
 
     </div>
+    <?php require 'form.php' ?>
   </section>
   <script src="/js/script.js"></script>
 </body>

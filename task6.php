@@ -33,7 +33,7 @@
       <textarea name="marks" id="marks" rows="5" cols="25" placeholder="English|80"></textarea>
       <br><br>
       <label for="phone">Phone (+91 xxxxxxxxxx): </label>
-      <input type="text" id="phone" name="phone" placeholder="+91 1231231234">
+      <input type="text" id="phone" name="phone" placeholder="+91 1231231234" value="+91 ">
       <br><br>
       <label for="email">Enter E-mail: </label>
       <input type="text" id="email" name="email" placeholder="email@example.com">
