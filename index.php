@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PHP Task 4</title>
 </head>
+
 <body>
 
-<h1>Fill the Form</h1>
-<form method="post" action="form.php" enctype="multipart/form-data">
+  <h1>Fill the Form</h1>
+
+  <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data">
     <label for="fname">First Name: </label>
     <input type="text" name="fname" id="fname" oninput="autofill('fname','lname','fullname')" required>
     <span class="error" style="color: red;">* </span>
@@ -27,11 +30,12 @@
     <textarea name="marks" id="marks" rows="5" cols="25"></textarea>
     <br><br>
     <label for="phone">Phone (+91 xxxxxxxxxx): </label>
-    <input type="text" id="phone" name="phone">
+    <input type="text" id="phone" name="phone" value="+91 ">
     <br><br>
     <input type="submit" name="submit" id="submit">
   </form>
-
+  <?php require 'form.php' ?>
   <script src="/js/script.js"></script>
 </body>
+
 </html>

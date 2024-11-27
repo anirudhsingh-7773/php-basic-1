@@ -13,24 +13,24 @@ class form
   public function __construct()
   {
     if (empty($_POST['fname'])) {
-      echo "<p style='color: red;'>Enter First Name</p><br>";
+      echo "<p style='color: red;'>Enter First Name</p>";
     } else if (!preg_match('/^[a-zA-Z]+$/', $_POST['fname'])) {
-      echo "<p style='color: red;'>First name can only contain letters!</p><br>";
+      echo "<p style='color: red;'>First name can only contain letters!</p>";
     } else {
       $this->fname = $this->test_input($_POST["fname"]);
     }
 
     if (empty($_POST['lname'])) {
-      echo "<p style='color: red;'>Enter Last Name</p><br>";
+      echo "<p style='color: red;'>Enter Last Name</p>";
     } else if (!preg_match('/^[a-zA-Z]+$/', $_POST['lname'])) {
-      echo "<p style='color: red;'>Last name can only contain letters!</p><br>";
+      echo "<p style='color: red;'>Last name can only contain letters!</p>";
     } else {
       $this->lname = $this->test_input($_POST["lname"]);
     }
 
     if (!empty($this->fname) && !empty($this->lname)) {
       $this->fullname = $this->fname . ' ' . $this->lname;
-      echo '<h1>Hello ' . $this->fullname . '!</h1><br>';
+      echo '<h1>Hello ' . $this->fullname . '!</h1>';
     }
   }
 
@@ -45,7 +45,7 @@ class form
   public function imageValidation()
   {
     if (!isset($_FILES["uploadImage"])) {
-      echo "<p style='color: red;'>No file uploaded.</p><br>";
+      echo "<p style='color: red;'>No file uploaded.</p>";
       return;
     }
     $target_dir = __DIR__ . '/uploads/';
@@ -56,19 +56,19 @@ class form
 
     // Allow certain file formats
     if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
-      echo "<p style='color: red;'>Sorry, only JPG, JPEG, PNG & GIF files are allowed.</p><br>";
-      $uploadOk = 0;
+      echo "<p style='color: red;'>Sorry, only JPG, JPEG, PNG & GIF files are allowed.</p>";
+      return;
     }
 
     // Check if $uploadOk is set to 0 by an error
     if ($uploadOk == 0) {
-      echo "<p style='color: red;'>Sorry, your file was not uploaded.</p><br>";
+      echo "<p style='color: red;'>Sorry, your file was not uploaded.</p>";
     } else {
       // Attempt to upload the file
       if (move_uploaded_file($_FILES["uploadImage"]["tmp_name"], $target_file)) {
         echo '<img width="300" height="300" src="uploads/' . htmlspecialchars($_FILES["uploadImage"]["name"]) . '"/>';
       } else {
-        echo "<p style='color: red;'>Sorry, there was an error uploading your file.</p><br>";
+        echo "<p style='color: red;'>Sorry, there was an error uploading your file.</p>";
       }
     }
   }
@@ -85,24 +85,15 @@ class form
           list($subject, $mark) = explode('|', $line);
           $mark = (int)$mark;
 
-          // Check if the subject is already in the array
-          $subjectExists = false;
-          foreach ($this->marksArray as $entry) {
-            if (strtolower($entry['subject']) === strtolower($subject)) {
-              $subjectExists = true;
-              break;
-            }
-          }
-
-          if ($subjectExists) {
-            echo "<p style='color: red;'>Duplicate entry for subject: $subject</p>";
-          } elseif ($mark <= 100) {
+          if ($mark <= 100) {
             $this->marksArray[] = ["subject" => $subject, "mark" => $mark];
           } else {
             echo "<p style='color: red;'>Marks for $subject must be between 0 and 100. You entered: $mark</p>";
+            return;
           }
         } else {
           echo "<p style='color: red;'>Invalid format: $line (Correct format: Subject|Marks)</p>";
+          return;
         }
       }
     }
@@ -131,7 +122,7 @@ class form
       if (empty($_POST['phone'])) {
         echo "<p style='color: red;'>Enter Phone Number</p>";
       } else if (!preg_match('/^\+91\s?\d{10}$/', $_POST['phone'])) {
-        echo "<p style='color: red;'>Invalid Format</p>";
+        echo "<p style='color: red;'>Invalid Format For Phone Number</p>";
       } else {
         $this->phone = $this->test_input($_POST["phone"]);
         echo '<p>Your phone number is ' . $this->phone . '</p><br><br>';
@@ -140,7 +131,10 @@ class form
   }
 }
 
-$formdata = new form();
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+  $formdata = new form();
 $formdata->imageValidation();
 $formdata->marksValidation();
 $formdata->phoneValidation();
+}
