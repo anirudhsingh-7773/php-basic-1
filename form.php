@@ -56,6 +56,7 @@ class form
     // Allow certain file formats
     if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
       echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.<br>";
+      return;
       $uploadOk = 0;
     }
 
@@ -65,6 +66,7 @@ class form
     } else {
       // Attempt to upload the file
       if (move_uploaded_file($_FILES["uploadImage"]["tmp_name"], $target_file)) {
+
         echo '<img width="300" height="300" src="uploads/' . htmlspecialchars($_FILES["uploadImage"]["name"]) . '"/>';
       } else {
         echo "Sorry, there was an error uploading your file.<br>";
@@ -84,24 +86,17 @@ class form
           list($subject, $mark) = explode('|', $line);
           $mark = (int)$mark;
 
-          // Check if the subject is already in the array
-          $subjectExists = false;
-          foreach ($this->marksArray as $entry) {
-            if (strtolower($entry['subject']) === strtolower($subject)) {
-              $subjectExists = true;
-              break;
-            }
-          }
+          // Remove duplicate entry check
 
-          if ($subjectExists) {
-            echo "<p style='color: red;'>Duplicate entry for subject: $subject</p>";
-          } elseif ($mark <= 100) {
+          if ($mark <= 100) {
             $this->marksArray[] = ["subject" => $subject, "mark" => $mark];
           } else {
             echo "<p style='color: red;'>Marks for $subject must be between 0 and 100. You entered: $mark</p>";
+            return;
           }
         } else {
           echo "<p style='color: red;'>Invalid format: $line (Correct format: Subject|Marks)</p>";
+          return;
         }
       }
     }
@@ -125,6 +120,14 @@ class form
   }
 }
 
-$formdata = new form();
-$formdata->imageValidation();
-$formdata->marksValidation();
+
+
+
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+  $formdata = new form();
+  $formdata->imageValidation();
+  $formdata->marksValidation();
+}
