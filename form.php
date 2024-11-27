@@ -11,7 +11,6 @@ class form
   public $phone;
   public $email;
 
-
   public function __construct()
   {
     if (empty($_POST['fname'])) {
@@ -59,7 +58,7 @@ class form
     // Allow certain file formats
     if (!in_array($imageFileType, ["jpg", "jpeg", "png", "gif"])) {
       echo "<p style='color: red;'>Sorry, only JPG, JPEG, PNG & GIF files are allowed.</p>";
-      $uploadOk = 0;
+      return;
     }
 
     // Check if $uploadOk is set to 0 by an error
@@ -70,7 +69,7 @@ class form
       if (move_uploaded_file($_FILES["uploadImage"]["tmp_name"], $target_file)) {
         echo '<img width="300" height="300" src="uploads/' . htmlspecialchars($_FILES["uploadImage"]["name"]) . '"/>';
       } else {
-        echo "<p style='color: red;'>Sorry, there was an error uploading your file.</p><";
+        echo "<p style='color: red;'>Sorry, there was an error uploading your file.</p>";
       }
     }
   }
@@ -87,24 +86,15 @@ class form
           list($subject, $mark) = explode('|', $line);
           $mark = (int)$mark;
 
-          // Check if the subject is already in the array
-          $subjectExists = false;
-          foreach ($this->marksArray as $entry) {
-            if (strtolower($entry['subject']) === strtolower($subject)) {
-              $subjectExists = true;
-              break;
-            }
-          }
-
-          if ($subjectExists) {
-            echo "<p style='color: red;'>Duplicate entry for subject: $subject</p>";
-          } elseif ($mark <= 100) {
+          if ($mark <= 100) {
             $this->marksArray[] = ["subject" => $subject, "mark" => $mark];
           } else {
             echo "<p style='color: red;'>Marks for $subject must be between 0 and 100. You entered: $mark</p>";
+            return;
           }
         } else {
           echo "<p style='color: red;'>Invalid format: $line (Correct format: Subject|Marks)</p>";
+          return;
         }
       }
     }
@@ -133,7 +123,7 @@ class form
       if (empty($_POST['phone'])) {
         echo "<p style='color: red;'>Enter Phone Number</p>";
       } else if (!preg_match('/^\+91\s?\d{10}$/', $_POST['phone'])) {
-        echo "<p style='color: red;'>Invalid Format</p>";
+        echo "<p style='color: red;'>Invalid Format For Phone Number</p>";
       } else {
         $this->phone = $this->test_input($_POST["phone"]);
         echo '<p>Your phone number is ' . $this->phone . '</p>';
@@ -147,7 +137,7 @@ class form
       if (empty($_POST['email'])) {
         echo "<p style='color: red;'>Enter Your Email</p>";
       } else if (!preg_match('/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/', $_POST['email'])) {
-        echo "<p style='color: red;'>Invalid Format</p>";
+        echo "<p style='color: red;'>Invalid Format For Email</p>";
       } else {
         // set API Access Key
         $access_key = '46ff2d5dd622a481bd7721e49f8e8660';
@@ -169,16 +159,17 @@ class form
           echo "<p style='color: red;'>Correct syntax but invalid email</p>";
         } else {
           $this->email = $email_address;
-          echo '<p>Your Email is ' . $this->email . '</p>';
+          echo '<p>Your Email is valid</p>';
         }
       }
     }
   }
 }
 
-$formdata = new form();
-$formdata->imageValidation();
-$formdata->marksValidation();
-$formdata->phoneValidation();
-$formdata->emailValidation();
-
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  $formdata = new form();
+  $formdata->imageValidation();
+  $formdata->marksValidation();
+  $formdata->phoneValidation();
+  $formdata->emailValidation();
+}
