@@ -5,7 +5,10 @@ class form
   public $fname;
   public $lname;
   public $fullname;
+<<<<<<< HEAD
   public $content;
+=======
+>>>>>>> FRES-17-task1
 
   public function __construct()
   {
@@ -31,6 +34,11 @@ class form
     }
   }
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> FRES-17-task1
   function test_input($data)
   {
     $data = trim($data);
@@ -38,6 +46,7 @@ class form
     $data = htmlspecialchars($data);
     return $data;
   }
+<<<<<<< HEAD
 
   public function imageValidation()
   {
@@ -73,3 +82,11 @@ class form
 
 $formdata = new form();
 $formdata->imageValidation();
+=======
+}
+
+if($_SERVER['REQUEST_METHOD']=='POST') {
+
+  $formdata = new form();
+}
+>>>>>>> FRES-17-task1

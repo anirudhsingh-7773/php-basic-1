@@ -8,7 +8,7 @@
 <body>
 
 <h1>Fill the Form</h1>
-<form method="post" action="form.php" enctype="multipart/form-data">
+<form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>" enctype="multipart/form-data">
     <label for="fname">First Name: </label>
     <input type="text" name="fname" id="fname" oninput="autofill('fname','lname','fullname')" required>
     <span class="error" style="color: red;">* </span>
@@ -25,7 +25,7 @@
     <br><br>
     <input type="submit" name="submit" id="submit">
   </form>
-
+  <?php require 'form.php' ?>
   <script src="/js/script.js"></script>
 </body>
 </html>
