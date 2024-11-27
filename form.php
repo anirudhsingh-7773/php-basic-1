@@ -134,7 +134,7 @@ class form
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
   $formdata = new form();
-$formdata->imageValidation();
-$formdata->marksValidation();
-$formdata->phoneValidation();
+  $formdata->imageValidation();
+  $formdata->marksValidation();
+  $formdata->phoneValidation();
 }
