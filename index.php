@@ -2,8 +2,10 @@
 // index.php
 include 'checkSession.php';
 
+// sets what task is selected, by default 4.
 $taskNumber = isset($_GET['q']) ? (int)$_GET['q'] : 4;
 
+// Includes the task which is selected.
 switch ($taskNumber) {
   case 1:
     include 'task1.php';

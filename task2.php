@@ -1,4 +1,7 @@
-<?php include 'checkSession.php'; ?>
+<?php 
+// Include session check to ensure the user is logged in
+include 'checkSession.php'; 
+?>
 <!-- task2.php -->
 <!DOCTYPE html>
 <html lang="en">
@@ -14,25 +17,37 @@
   <div class="container">
     <section>
       <h1>Fill the Form</h1>
+
+      <!-- Form submission using POST method with file upload support -->
       <form method="post" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF'] . '?q=2'); ?>" enctype="multipart/form-data">
+        
+        <!-- First Name input -->
         <label for="fname">First Name: </label>
         <input type="text" name="fname" id="fname" oninput="autofill('fname','lname','fullname')" required placeholder="John">
         <span class="error" style="color: red;">* </span>
         <br><br>
+
+        <!-- Last Name input -->
         <label for="lname">Last Name: </label>
         <input type="text" name="lname" id="lname" oninput="autofill('fname','lname','fullname')" required placeholder="Doe">
         <span class="error" style="color: red;">* </span>
         <br><br>
+
+        <!-- Disabled input field for Full Name -->
         <label for="name">Full Name: </label>
         <input type="text" name="name" id="fullname" value="" disabled>
         <br><br>
+
+        <!-- File upload input for image -->
         <label for="image">Choose an image:</label>
         <input type="file" id="image" name="uploadImage">
         <br><br>
+
+        <!-- Submit button -->
         <input type="submit" name="submit" id="submit">
       </form>
 
-      <!-- Pager -->
+      <!-- Navigation Pager to switch between task pages -->
       <div class="pager">
         <a href="index.php?q=<?php echo $taskNumber = 1; ?>">Question 1</a>
         <a style="background-color: black; color: white;" href="index.php?q=<?php echo $taskNumber = 2; ?>">Question 2</a>
@@ -41,12 +56,16 @@
         <a href="index.php?q=<?php echo $taskNumber = 5; ?>">Question 5</a>
         <a href="index.php?q=<?php echo $taskNumber = 6; ?>">Question 6</a>
         <a href="logout.php">Logout</a>
-
       </div>
-      <?php require 'form.php' ?>
+
+      <!-- Include form.php for handling form submission logic -->
+      <?php require 'form.php'; ?>
     </section>
   </div>
+
+  <!-- External JavaScript file for additional functionality -->
   <script src="/js/script.js"></script>
+
 </body>
 
 </html>
